@@ -3,7 +3,7 @@ const CANVAS_WIDTH = 1200;
 const CANVAS_HEIGHT = 600;
 const PLAYER_SIZE = 40;
 const OBSTACLE_SIZE = 60;
-const PLAYER_SPEED = 5;
+let PLAYER_SPEED = 5; // Changed to let để có thể thay đổi (băng đá)
 
 // ========== GAME STATE ==========
 let gameState = {
@@ -31,7 +31,8 @@ let player = {
 };
 
 // ========== GAME VARIABLES ==========
-let obstacles = [];
+let traps = [];
+let currentTrap = null; // Trap hiện tại đang tương tác
 let currentQuestion = null;
 let questionActive = false;
 let keysPressed = {};
@@ -44,13 +45,13 @@ const characters = {
         name: 'Tartah',
         gender: '👨 Nam',
         emoji: '🧙‍♂️',
-        intro: 'Hôm nay ta có nhiệm vụ nhỏ giao cho con, Tartah. Con hãy cầm bức thư này đem đến cho nhà vua ở kinh thành. Trên đường có lẽ sẽ gặp nhiều nguy hiểm nhưng ta tin con sẽ làm được. Nhớ rằng dù có chuyện gì xảy ra cũng phải bảo vệ bằng được bức thư.'
+        intro: 'Hôm nay ta có nhiệm vụ nhỏ giao cho con, Tartah. Con hãy cầm bức thư này đem đến cho nhà vua ở kinh thành. Trên đường có lẽ sẽ gặp nhiều nguy hiểm. Hãy trả lời đúng những câu hỏi lượng giác để vượt qua các thử thách và hoàn thành nhiệm vụ này!'
     },
     coco: {
         name: 'Coco',
         gender: '👩 Nữ',
         emoji: '🧙‍♀️',
-        intro: 'Hôm nay ta có nhiệm vụ nhỏ giao cho con, Coco. Con hãy cầm bức thư này đem đến cho nhà vua ở kinh thành. Trên đường có lẽ sẽ gặp nhiều nguy hiểm nhưng ta tin con sẽ làm được. Nhớ rằng dù có chuyện gì xảy ra cũng phải bảo vệ bằng được bức thư.'
+        intro: 'Hôm nay ta có nhiệm vụ nhỏ giao cho con, Coco. Con hãy cầm bức thư này đem đến cho nhà vua ở kinh thành. Trên đường có lẽ sẽ gặp nhiều nguy hiểm. Hãy trả lời đúng những câu hỏi lượng giác để vượt qua các thử thách và hoàn thành nhiệm vụ này!'
     }
 };
 
@@ -141,8 +142,9 @@ function initializeGame() {
     player.y = CANVAS_HEIGHT / 2 - PLAYER_SIZE / 2;
     player.velocity = { x: 0, y: 0 };
     
-    obstacles = [];
-    generateObstacles();
+    PLAYER_SPEED = 5; // Reset tốc độ
+    traps = [];
+    generateTraps();
     
     // Khởi tạo input handler
     setupKeyboardInput();
@@ -166,48 +168,40 @@ function setupKeyboardInput() {
     });
 }
 
-// ========== GENERATE OBSTACLES ==========
-function generateObstacles() {
-    obstacles = [];
-    const obstacleTypes = ['tree', 'hole', 'iguin', 'ronaldo'];
-    const weights = [50, 40, 10, 15]; // Tỉ lệ xuất hiện
+// ========== GENERATE TRAPS ==========
+/**
+ * Tạo mảng các bẫy sử dụng Trap class
+ */
+function generateTraps() {
+    traps = [];
+    const trapTypesList = Object.values(TRAP_TYPES);
+    const weights = [40, 25, 15, 10, 5, 5]; // Tỉ lệ xuất hiện từng loại bẫy
     
-    const numObstacles = 8 + Math.random() * 4; // 8-12 chướng ngại vật
+    const numTraps = 8 + Math.floor(Math.random() * 4); // 8-11 bẫy
     
-    for (let i = 0; i < numObstacles; i++) {
+    for (let i = 0; i < numTraps; i++) {
         const randomX = 300 + i * 100 + Math.random() * 50;
         const randomY = 50 + Math.random() * (CANVAS_HEIGHT - OBSTACLE_SIZE - 100);
         
-        // Chọn loại chướng ngại vật dựa trên trọng số
-        const rand = Math.random() * 100;
-        let type;
-        if (rand < weights[0]) type = obstacleTypes[0];
-        else if (rand < weights[0] + weights[1]) type = obstacleTypes[1];
-        else if (rand < weights[0] + weights[1] + weights[2]) type = obstacleTypes[2];
-        else type = obstacleTypes[3];
+        // Chọn loại bẫy dựa trên trọng số
+        let rand = Math.random() * 100;
+        let selectedType = trapTypesList[0];
+        let cumulative = 0;
         
-        obstacles.push({
-            x: randomX,
-            y: randomY,
-            width: OBSTACLE_SIZE,
-            height: OBSTACLE_SIZE,
-            type: type,
-            emoji: getObstacleEmoji(type),
-            hit: false
-        });
+        for (let j = 0; j < trapTypesList.length; j++) {
+            cumulative += weights[j];
+            if (rand < cumulative) {
+                selectedType = trapTypesList[j];
+                break;
+            }
+        }
+        
+        // Tạo Trap object
+        const trap = new Trap(randomX, randomY, selectedType);
+        traps.push(trap);
     }
     
-    console.log(`✨ Tạo ${obstacles.length} chướng ngại vật`);
-}
-
-function getObstacleEmoji(type) {
-    const emojis = {
-        'tree': '🌳',
-        'hole': '🕳️',
-        'iguin': '🧙',
-        'ronaldo': '⚽'
-    };
-    return emojis[type] || '❓';
+    console.log(`✨ Tạo ${traps.length} bẫy`);
 }
 
 // ========== GAME LOOP ==========
@@ -216,6 +210,7 @@ function gameLoop() {
     
     // Update
     updatePlayer();
+    updateTraps(); // Cập nhật trạng thái các bẫy
     checkCollisions();
     
     // Draw
@@ -223,6 +218,16 @@ function gameLoop() {
     
     // Continue loop
     requestAnimationFrame(gameLoop);
+}
+
+// ========== UPDATE TRAPS ==========
+/**
+ * Cập nhật trạng thái tất cả các bẫy
+ */
+function updateTraps() {
+    for (let trap of traps) {
+        trap.update();
+    }
 }
 
 // ========== UPDATE PLAYER ==========
@@ -249,10 +254,10 @@ function updatePlayer() {
 
 // ========== CHECK COLLISIONS ==========
 function checkCollisions() {
-    for (let obstacle of obstacles) {
-        if (!obstacle.hit && isColliding(player, obstacle)) {
-            obstacle.hit = true;
-            handleCollision(obstacle);
+    for (let trap of traps) {
+        if (!trap.hit && isColliding(player, trap)) {
+            trap.hit = true;
+            handleTrapCollision(trap);
         }
     }
     
@@ -273,33 +278,32 @@ function isColliding(rect1, rect2) {
            rect1.y + rect1.height > rect2.y;
 }
 
-// ========== HANDLE COLLISION ==========
-function handleCollision(obstacle) {
-    console.log(`💥 Va chạm với: ${obstacle.type}`);
-    
-    if (obstacle.type === 'ronaldo') {
-        // Luôn phải trả lời câu hỏi
-        showQuestion(obstacle);
-    } else {
-        // Có cơ hội trả lời hoặc mất mạng
-        if (Math.random() > 0.5) {
-            // 50% trả lời câu hỏi
-            showQuestion(obstacle);
-        } else {
-            // 50% mất mạng
-            loseHealth();
-        }
-    }
+// ========== HANDLE TRAP COLLISION ==========
+/**
+ * Xử lý va chạm với bẫy
+ */
+function handleTrapCollision(trap) {
+    console.log(`💥 Va chạm với: ${trap.config.name}`);
+    currentTrap = trap;
+    handleTrapEffect(trap);
 }
 
-// ========== SHOW QUESTION ==========
-function showQuestion(obstacle) {
+// ========== SHOW TRAP QUESTION ==========
+/**
+ * Hiển thị câu hỏi cho bẫy
+ */
+function showTrapQuestion(trap) {
     questionActive = true;
     currentQuestion = getRandomQuestion();
+    currentTrap = trap;
     
     const questionModal = document.getElementById('questionModal');
     const questionText = document.getElementById('questionText');
     const answersContainer = document.getElementById('answersContainer');
+    
+    // Hiển thị tên bẫy trong tiêu đề
+    const modalTitle = questionModal.querySelector('h2') || document.createElement('h2');
+    modalTitle.textContent = `⚔️ ${trap.config.name} - Trả lời để thoát!`;
     
     questionText.textContent = currentQuestion.question;
     answersContainer.innerHTML = '';
@@ -308,31 +312,28 @@ function showQuestion(obstacle) {
         const btn = document.createElement('button');
         btn.className = 'btn answer-btn';
         btn.textContent = option;
-        btn.onclick = () => handleAnswer(index, currentQuestion.correct, obstacle);
+        btn.onclick = () => handleTrapAnswer(index, currentQuestion.correct, trap);
         answersContainer.appendChild(btn);
     });
     
     questionModal.style.display = 'flex';
 }
 
-// ========== HANDLE ANSWER ==========
-function handleAnswer(selected, correct, obstacle) {
+// ========== HANDLE TRAP ANSWER ==========
+/**
+ * Xử lý đáp án câu hỏi bẫy
+ */
+function handleTrapAnswer(selected, correct, trap) {
     const questionModal = document.getElementById('questionModal');
     questionModal.style.display = 'none';
     questionActive = false;
     
-    if (selected === correct) {
-        console.log('✅ Trả lời đúng!');
-        gameState.score += 10;
-    } else {
-        console.log('❌ Trả lời sai!');
-        loseHealth();
-    }
+    handleTrapQuestion(trap, selected === correct);
 }
 
 // ========== LOSE HEALTH ==========
-function loseHealth() {
-    gameState.playerHealth--;
+function loseHealth(amount = 1) {
+    gameState.playerHealth -= amount;
     console.log(`❤️ Mạng còn lại: ${gameState.playerHealth}`);
     
     if (gameState.playerHealth <= 0) {
@@ -347,8 +348,10 @@ function nextStage() {
     
     player.x = 100;
     player.y = CANVAS_HEIGHT / 2 - PLAYER_SIZE / 2;
-    obstacles = [];
-    generateObstacles();
+    PLAYER_SPEED = 5; // Reset tốc độ
+    
+    traps = [];
+    generateTraps();
 }
 
 // ========== WIN GAME ==========
@@ -417,16 +420,15 @@ function draw() {
     ctx.fillStyle = '#f1faee';
     ctx.fillText('🏁', CANVAS_WIDTH - 50, CANVAS_HEIGHT / 2);
     
+    // Draw traps với hiệu ứng đặc biệt
+    for (let trap of traps) {
+        trap.draw(ctx);
+    }
+    
     // Draw player
     ctx.font = '30px Arial';
     ctx.textAlign = 'center';
     ctx.fillText(player.emoji, player.x + player.width / 2, player.y + player.height / 2 + 10);
-    
-    // Draw obstacles
-    ctx.font = '40px Arial';
-    for (let obstacle of obstacles) {
-        ctx.fillText(obstacle.emoji, obstacle.x + obstacle.width / 2, obstacle.y + obstacle.height / 2 + 15);
-    }
     
     // Draw HUD
     drawHUD();
