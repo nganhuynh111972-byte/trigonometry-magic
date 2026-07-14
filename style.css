@@ -181,6 +181,21 @@ body {
     transform: scale(1.05);
 }
 
+.answer-btn {
+    background: linear-gradient(135deg, #457b9d 0%, #1d3557 100%);
+    color: white;
+    padding: 12px 30px;
+    font-size: 1em;
+    width: 100%;
+    margin: 10px 0;
+    text-align: left;
+}
+
+.answer-btn:hover {
+    background: linear-gradient(135deg, #e94560 0%, #f07167 100%);
+    transform: translateX(5px);
+}
+
 /* Character Select Modal */
 .character-select-modal {
     text-align: center;
@@ -409,6 +424,179 @@ body {
     margin-bottom: 40px;
 }
 
+/* Question Modal */
+.question-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.question-container {
+    background: rgba(0, 0, 0, 0.95);
+    padding: 40px;
+    border-radius: 20px;
+    border: 2px solid #e94560;
+    max-width: 600px;
+    animation: slideUp 0.3s ease-out;
+}
+
+.question-container h2 {
+    font-size: 1.8em;
+    color: #e94560;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.question-text {
+    font-size: 1.3em;
+    color: #a8dadc;
+    margin-bottom: 30px;
+    text-align: center;
+    line-height: 1.6;
+}
+
+.answers-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Boss Battle Modal */
+.boss-battle-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.boss-battle-container {
+    background: linear-gradient(135deg, rgba(139, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.9) 100%);
+    padding: 50px;
+    border-radius: 20px;
+    border: 3px solid #DAA520;
+    max-width: 700px;
+    animation: slideUp 0.3s ease-out;
+    box-shadow: 0 0 50px rgba(218, 165, 32, 0.3);
+}
+
+.boss-info {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #DAA520;
+}
+
+.boss-name {
+    font-size: 2.5em;
+    color: #FFD700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+    margin-bottom: 10px;
+}
+
+.boss-description {
+    font-size: 1.1em;
+    color: #a8dadc;
+    margin-bottom: 20px;
+    font-style: italic;
+}
+
+.health-bar-container {
+    background: #1a1a1a;
+    border: 2px solid #666;
+    border-radius: 10px;
+    height: 30px;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.health-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00AA00 0%, #FFAA00 50%, #AA0000 100%);
+    width: 100%;
+    transition: width 0.3s ease;
+}
+
+.health-text {
+    font-size: 0.9em;
+    color: #fff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: bold;
+}
+
+.boss-question-section {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 30px;
+    border-radius: 15px;
+    border: 2px solid #457b9d;
+}
+
+.boss-question-text {
+    font-size: 1.4em;
+    color: #a8dadc;
+    margin-bottom: 25px;
+    text-align: center;
+    line-height: 1.6;
+}
+
+.boss-answers-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Game Over Screen */
+.game-over-screen {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    justify-content: center;
+    align-items: center;
+    z-index: 3000;
+}
+
+.game-over-container {
+    text-align: center;
+    background: rgba(0, 0, 0, 0.9);
+    padding: 60px 40px;
+    border-radius: 20px;
+    border: 3px solid #e94560;
+    max-width: 600px;
+    animation: slideUp 0.5s ease-out;
+}
+
+.game-over-container h1 {
+    font-size: 3em;
+    margin-bottom: 20px;
+    text-shadow: 0 0 20px rgba(233, 69, 96, 0.8);
+}
+
+.game-over-container p {
+    font-size: 1.3em;
+    color: #a8dadc;
+    margin-bottom: 15px;
+}
+
 /* Scrollbar Styling */
 ::-webkit-scrollbar {
     width: 10px;
@@ -457,5 +645,18 @@ body {
     .btn {
         padding: 12px 30px;
         font-size: 0.95em;
+    }
+    
+    .boss-battle-container {
+        padding: 30px;
+        max-width: 95%;
+    }
+    
+    .boss-name {
+        font-size: 2em;
+    }
+    
+    .boss-question-text {
+        font-size: 1.1em;
     }
 }
