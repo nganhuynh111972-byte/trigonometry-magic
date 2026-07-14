@@ -227,7 +227,7 @@ body {
 
 .character-image {
     margin-bottom: 20px;
-    height: 250px;
+    height: 300px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -236,26 +236,12 @@ body {
     background: rgba(0, 0, 0, 0.3);
 }
 
-.character-avatar {
-    font-size: 8em;
-    animation: float 3s ease-in-out infinite;
-}
-
-@keyframes float {
-    0%, 100% {
-        transform: translateY(0px);
-    }
-    50% {
-        transform: translateY(-10px);
-    }
-}
-
-.tartah-avatar {
-    animation-delay: 0s;
-}
-
-.coco-avatar {
-    animation-delay: 0.5s;
+.character-image img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    opacity: 0;
+    transition: opacity 0.5s ease-in;
 }
 
 .character-card h3 {
@@ -310,6 +296,15 @@ body {
 .master-avatar {
     font-size: 6em;
     animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
 }
 
 .dialogue-box {
