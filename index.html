@@ -79,37 +79,63 @@
             
             <div class="guide-content">
                 <h3>📖 Cốt Truyện</h3>
-                <p>Bạn là một pháp sư tập sự được giao nhiệm vụ mang một bức thư bí mật đến kinh đô. Trên đường đi, bạn sẽ gặp phải những chướng ngại vật và phải chiến đấu với các boss quy mô lớn.</p>
+                <p>Bạn là một pháp sư tập sự được giao nhiệm vụ mang một bức thư bí mật đến kinh đô. Trên đường đi, bạn sẽ gặp phải những chướng ngại vật nguy hiểm. Hãy trả lời đúng những câu hỏi lượng giác để vượt qua chúng!</p>
                 
                 <h3>🎮 Cách Chơi</h3>
                 <ul>
-                    <li><strong>Di chuyển:</strong> W (lên), S (xuống), A (trái), D (phải)</li>
-                    <li><strong>Chướng ngại vật:</strong> Tránh cây ma, hố bẫy, và trả lời câu hỏi</li>
-                    <li><strong>Chiến đấu:</strong> Trả lời câu hỏi lượng giác để hoàn thiện vòng tròn phép thuật</li>
-                    <li><strong>Boss:</strong> Mỗi boss cần 2-6 câu hỏi để đánh bại</li>
+                    <li><strong>Di chuyển:</strong> W (lên), S (xuống), A (trái), D (phải) hoặc mũi tên</li>
+                    <li><strong>6 loại bẫy:</strong> 
+                        <ul>
+                            <li>🌳 Cây Ma - Cản đường cơ bản (60% hỏi)</li>
+                            <li>🕳️ Hố Bẫy - Mất 2 mạng (80% hỏi)</li>
+                            <li>🔥 Bẫy Lửa - Burn damage liên tục (100% hỏi)</li>
+                            <li>❄️ Bẫy Băng - Làm chậm tốc độ (không hỏi)</li>
+                            <li>⚡ Bẫy Sét - Teleport ngẫu nhiên (90% hỏi)</li>
+                            <li>🌀 Bẫy Xoáy - Kéo player về phía trước (70% hỏi)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Trả lời đúng:</strong> Thoát bẫy + 15 điểm</li>
+                    <li><strong>Trả lời sai:</strong> Mất 1 mạng</li>
                 </ul>
                 
-                <h3>💚 Sinh Mạng</h3>
-                <p>Bạn có 10 mạng. Mỗi lần gặp chướng ngại vật sẽ mất 1 mạng, nhưng có cơ hội trả lời câu hỏi để lấy lại.</p>
+                <h3>❤️ Sinh Mạng</h3>
+                <p>Bạn có 10 mạng. Hãy cẩn thận! Khi mạng hết, trò chơi kết thúc.</p>
                 
                 <h3>🎯 Mục Tiêu</h3>
-                <p>Vượt qua 3 đoạn đường, đánh bại 3 boss (Cerberus, Gryphon, Dragon) và trao bức thư cho nhà vua!</p>
+                <p>Vượt qua 3 đoạn đường, tránh/vượt qua các bẫy và đến được cờ 🏁 để chiến thắng!</p>
             </div>
             
             <button class="btn btn-back" onclick="backToMenu()">← QUAY LẠI</button>
         </div>
     </div>
 
-    <!-- Màn hình chờ (sẽ dùng cho các phần tiếp theo) -->
+    <!-- Màn hình Game -->
     <div id="gameScreen" class="screen">
-        <div class="game-container">
-            <h2>🎮 Trò Chơi Đang Phát Triển...</h2>
-            <p>Phần 1 đã hoàn thành! Các phần tiếp theo sẽ được phát triển...</p>
-            <button class="btn btn-back" onclick="backToMenu()">← QUAY LẠI</button>
+        <canvas id="gameCanvas" style="display: block; margin: 0 auto; border: 2px solid #e94560;"></canvas>
+    </div>
+
+    <!-- Modal Câu Hỏi -->
+    <div id="questionModal" class="question-modal">
+        <div class="question-container">
+            <h2>⚔️ Trả lời câu hỏi</h2>
+            <p id="questionText" class="question-text"></p>
+            <div id="answersContainer" class="answers-container"></div>
+        </div>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="gameOverScreen" class="game-over-screen">
+        <div class="game-over-container">
+            <h1 id="gameOverTitle">🏆 CHIẾN THẮNG!</h1>
+            <p id="gameOverMessage">Bạn đã hoàn thành nhiệm vụ!</p>
+            <p id="gameOverScore">Điểm số: 0</p>
+            <button id="restartBtn" class="btn btn-start" onclick="">CHƠI LẠI</button>
+            <button class="btn btn-back" onclick="backToMenu()">← QUAY LẠI MENU</button>
         </div>
     </div>
 
     <script src="questions.js"></script>
-    <script src="script.js"></script>
+    <script src="traps.js"></script>
+    <script src="game.js"></script>
 </body>
 </html>
