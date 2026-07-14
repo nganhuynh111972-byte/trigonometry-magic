@@ -4,6 +4,12 @@
     box-sizing: border-box;
 }
 
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
@@ -12,18 +18,20 @@ body {
     justify-content: center;
     align-items: center;
     color: #fff;
-    overflow: hidden;
+    position: relative;
 }
 
 /* Screens */
 .screen {
     display: none;
     width: 100%;
-    height: 100vh;
-    position: absolute;
+    height: 100%;
+    position: fixed;
     top: 0;
     left: 0;
     animation: fadeIn 0.5s ease-in-out;
+    overflow: hidden;
+    z-index: 1000;
 }
 
 .screen.active {
@@ -41,6 +49,18 @@ body {
     }
 }
 
+/* Modal Overlay */
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    cursor: pointer;
+    z-index: 10;
+}
+
 /* Main Menu */
 .menu-container {
     text-align: center;
@@ -51,6 +71,8 @@ body {
     border: 2px solid #e94560;
     max-width: 600px;
     animation: slideUp 0.6s ease-out;
+    position: relative;
+    z-index: 20;
 }
 
 @keyframes slideUp {
@@ -135,13 +157,13 @@ body {
     box-shadow: 0 6px 20px rgba(29, 53, 87, 0.6);
 }
 
-.btn-next, .btn-back {
+.btn-next, .btn-back, .btn-cancel {
     background: linear-gradient(135deg, #f1faee 0%, #a8dadc 100%);
     color: #1d3557;
     font-weight: bold;
 }
 
-.btn-next:hover, .btn-back:hover {
+.btn-next:hover, .btn-back:hover, .btn-cancel:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(161, 218, 220, 0.4);
 }
@@ -152,24 +174,30 @@ body {
     padding: 10px 30px;
     font-size: 0.9em;
     width: 100%;
+    margin: 15px 0 0 0;
 }
 
 .btn-select:hover {
     transform: scale(1.05);
 }
 
-/* Character Select */
-.character-select-container {
+/* Character Select Modal */
+.character-select-modal {
     text-align: center;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.9);
     padding: 40px;
     border-radius: 20px;
     backdrop-filter: blur(10px);
     border: 2px solid #e94560;
     max-width: 900px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    z-index: 20;
+    animation: slideUp 0.6s ease-out;
 }
 
-.character-select-container h2 {
+.character-select-modal h2 {
     font-size: 2.5em;
     color: #e94560;
     margin-bottom: 40px;
@@ -177,7 +205,7 @@ body {
 
 .characters-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 30px;
     margin-bottom: 30px;
 }
@@ -199,7 +227,7 @@ body {
 
 .character-image {
     margin-bottom: 20px;
-    height: 300px;
+    height: 250px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -208,10 +236,26 @@ body {
     background: rgba(0, 0, 0, 0.3);
 }
 
-.character-image img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
+.character-avatar {
+    font-size: 8em;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.tartah-avatar {
+    animation-delay: 0s;
+}
+
+.coco-avatar {
+    animation-delay: 0.5s;
 }
 
 .character-card h3 {
@@ -237,6 +281,8 @@ body {
     width: 100%;
     max-width: 1000px;
     padding: 40px;
+    position: relative;
+    z-index: 20;
 }
 
 .intro-content {
@@ -248,23 +294,22 @@ body {
     padding: 40px;
     border-radius: 20px;
     border: 2px solid #e94560;
+    animation: slideUp 0.6s ease-out;
 }
 
 .master-image {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 400px;
+    height: 350px;
     background: linear-gradient(135deg, rgba(233, 69, 96, 0.2) 0%, rgba(168, 218, 220, 0.2) 100%);
     border-radius: 15px;
     border: 2px solid #a8dadc;
 }
 
-.master-placeholder {
-    font-size: 2em;
-    font-weight: bold;
-    color: #e94560;
-    text-align: center;
+.master-avatar {
+    font-size: 6em;
+    animation: float 3s ease-in-out infinite;
 }
 
 .dialogue-box {
@@ -290,13 +335,16 @@ body {
 
 /* Guide Screen */
 .guide-container {
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.9);
     padding: 40px;
     border-radius: 20px;
     border: 2px solid #e94560;
     max-width: 900px;
-    max-height: 80vh;
+    max-height: 85vh;
     overflow-y: auto;
+    position: relative;
+    z-index: 20;
+    animation: slideUp 0.6s ease-out;
 }
 
 .guide-container h2 {
@@ -350,6 +398,8 @@ body {
     border-radius: 20px;
     border: 2px solid #e94560;
     max-width: 600px;
+    position: relative;
+    z-index: 20;
 }
 
 .game-container h2 {
@@ -391,6 +441,7 @@ body {
     
     .menu-container {
         padding: 40px 20px;
+        max-width: 90%;
     }
     
     .characters-grid {
@@ -399,6 +450,13 @@ body {
     
     .intro-content {
         grid-template-columns: 1fr;
+        padding: 20px;
+    }
+    
+    .character-select-modal {
+        padding: 30px 20px;
+        max-width: 95%;
+        border-radius: 15px;
     }
     
     .btn {
