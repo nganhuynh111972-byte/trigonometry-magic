@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pháp Thuật Lượng Giác - Trigonometry Magic</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Menu Chính -->
+    <div id="mainMenu" class="screen active">
+        <div class="menu-container">
+            <h1 class="game-title">⚡ Pháp Thuật Lượng Giác ⚡</h1>
+            <p class="game-subtitle">Trigonometry Magic</p>
+            <p class="game-description">Trở thành pháp sư mạnh mẽ bằng kiến thức lượng giác!</p>
+            
+            <button class="btn btn-start" onclick="startGame()">BẮT ĐẦU</button>
+            <button class="btn btn-guide" onclick="showGuide()">HƯỚNG DẪN</button>
+        </div>
+    </div>
+
+    <!-- Màn hình Chọn nhân vật -->
+    <div id="characterSelect" class="screen">
+        <div class="character-select-container">
+            <h2>Chọn Nhân Vật Của Bạn</h2>
+            
+            <div class="characters-grid">
+                <!-- Tartah -->
+                <div class="character-card" onclick="selectCharacter('tartah')">
+                    <div class="character-image">
+                        <img src="https://static.wikia.nocookie.net/witch-hat-atelier/images/5/53/Tartah_anime_a.png/revision/latest?cb=20260420151432" alt="Tartah">
+                    </div>
+                    <h3>Tartah</h3>
+                    <p class="character-gender">👨 Nam</p>
+                    <p class="character-role">Pháp sư tập sự</p>
+                    <button class="btn btn-select">CHỌN</button>
+                </div>
+
+                <!-- Coco -->
+                <div class="character-card" onclick="selectCharacter('coco')">
+                    <div class="character-image">
+                        <img src="https://static.wikia.nocookie.net/witch-hat-atelier/images/4/43/Coco-a.png/revision/latest?cb=20260220085314" alt="Coco">
+                    </div>
+                    <h3>Coco</h3>
+                    <p class="character-gender">👩 Nữ</p>
+                    <p class="character-role">Pháp sư tập sự</p>
+                    <button class="btn btn-select">CHỌN</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Màn hình Intro (Đối thoại với Sư Phụ) -->
+    <div id="introScreen" class="screen">
+        <div class="intro-container">
+            <div class="intro-content">
+                <div class="master-image">
+                    <div class="master-placeholder">📚 Master Beldaruit</div>
+                </div>
+                
+                <div class="dialogue-box">
+                    <h2 id="masterName">Master Beldaruit</h2>
+                    <p id="masterDialogue" class="dialogue-text"></p>
+                    
+                    <button class="btn btn-next" onclick="continueIntro()">TIẾP TỤC →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hướng dẫn -->
+    <div id="guideScreen" class="screen">
+        <div class="guide-container">
+            <h2>Hướng Dẫn Chơi</h2>
+            
+            <div class="guide-content">
+                <h3>📖 Cốt Truyện</h3>
+                <p>Bạn là một pháp sư tập sự được giao nhiệm vụ mang một bức thư bí mật đến kinh đô. Trên đường đi, bạn sẽ gặp phải những chướng ngại vật và phải chiến đấu với các boss quy mô lớn.</p>
+                
+                <h3>🎮 Cách Chơi</h3>
+                <ul>
+                    <li><strong>Di chuyển:</strong> W (lên), S (xuống), A (trái), D (phải)</li>
+                    <li><strong>Chướng ngại vật:</strong> Tránh cây ma, hố bẫy, và trả lời câu hỏi</li>
+                    <li><strong>Chiến đấu:</strong> Trả lời câu hỏi lượng giác để hoàn thiện vòng tròn phép thuật</li>
+                    <li><strong>Boss:</strong> Mỗi boss cần 2-6 câu hỏi để đánh bại</li>
+                </ul>
+                
+                <h3>💚 Sinh Mạng</h3>
+                <p>Bạn có 10 mạng. Mỗi lần gặp chướng ngại vật sẽ mất 1 mạng, nhưng có cơ hội trả lời câu hỏi để lấy lại.</p>
+                
+                <h3>🎯 Mục Tiêu</h3>
+                <p>Vượt qua 3 đoạn đường, đánh bại 3 boss (Cerberus, Gryphon, Dragon) và trao bức thư cho nhà vua!</p>
+            </div>
+            
+            <button class="btn btn-back" onclick="backToMenu()">← QUAY LẠI</button>
+        </div>
+    </div>
+
+    <!-- Màn hình chờ (sẽ dùng cho các phần tiếp theo) -->
+    <div id="gameScreen" class="screen">
+        <div class="game-container">
+            <h2>🎮 Trò Chơi Đang Phát Triển...</h2>
+            <p>Phần 1 đã hoàn thành! Các phần tiếp theo sẽ được phát triển...</p>
+            <button class="btn btn-back" onclick="backToMenu()">← QUAY LẠI</button>
+        </div>
+    </div>
+
+    <script src="questions.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
