@@ -19,16 +19,17 @@
         </div>
     </div>
 
-    <!-- Màn hình Chọn nhân vật -->
+    <!-- Màn hình Chọn nhân vật (Modal) -->
     <div id="characterSelect" class="screen">
-        <div class="character-select-container">
+        <div class="modal-overlay" onclick="backToMenu()"></div>
+        <div class="character-select-modal">
             <h2>Chọn Nhân Vật Của Bạn</h2>
             
             <div class="characters-grid">
                 <!-- Tartah -->
                 <div class="character-card" onclick="selectCharacter('tartah')">
                     <div class="character-image">
-                        <img src="https://static.wikia.nocookie.net/witch-hat-atelier/images/5/53/Tartah_anime_a.png/revision/latest?cb=20260420151432" alt="Tartah">
+                        <div class="character-avatar tartah-avatar">👨‍🧙</div>
                     </div>
                     <h3>Tartah</h3>
                     <p class="character-gender">👨 Nam</p>
@@ -39,7 +40,7 @@
                 <!-- Coco -->
                 <div class="character-card" onclick="selectCharacter('coco')">
                     <div class="character-image">
-                        <img src="https://static.wikia.nocookie.net/witch-hat-atelier/images/4/43/Coco-a.png/revision/latest?cb=20260220085314" alt="Coco">
+                        <div class="character-avatar coco-avatar">👩‍🧙</div>
                     </div>
                     <h3>Coco</h3>
                     <p class="character-gender">👩 Nữ</p>
@@ -47,6 +48,8 @@
                     <button class="btn btn-select">CHỌN</button>
                 </div>
             </div>
+            
+            <button class="btn btn-cancel" onclick="backToMenu()">← HỦY</button>
         </div>
     </div>
 
@@ -55,7 +58,7 @@
         <div class="intro-container">
             <div class="intro-content">
                 <div class="master-image">
-                    <div class="master-placeholder">📚 Master Beldaruit</div>
+                    <div class="master-avatar">📚</div>
                 </div>
                 
                 <div class="dialogue-box">
@@ -70,6 +73,7 @@
 
     <!-- Hướng dẫn -->
     <div id="guideScreen" class="screen">
+        <div class="modal-overlay" onclick="backToMenu()"></div>
         <div class="guide-container">
             <h2>Hướng Dẫn Chơi</h2>
             
